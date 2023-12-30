@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+   <link rel="stylesheet" href="index.css">
+    
+</head>
+<body>
+    <div class="container">
+        <div class="inner">
+            <div class="box">
+                <p class="number">
+                    <img src="twitterLogo.png" alt="tweetMe" title="tweetMe" id="tweetMe">
+                </p>
+                <div class="text">
+                    <i class="fa-solid fa-quote-left"></i>
+                    <p id="quotes" class="quotes"></p>
+                    <p id="author" class="author"></p>
+                </div>
+
+                <label for="" class="button">
+                    <p id="newQ">New Quotes</p>
+                </label>
+            </div>
+        </div>
+    </div>
+    <script>
+         const quotes= document.getElementById("quotes");
+        const author= document.getElementById("author");
+        const newQ= document.getElementById("newQ");
+        const tweetMe= document.getElementById("tweetMe");
+        let realData="";
+        let quotesData="";
+
+        const tweetNow= ()=>{
+            // this is twitter intent link it will redirect to twitter and to add data automatically to text box use ?text=jo data use krna h wo
+            let tweetPost= `https://twitter.com/intent/tweet?text=${quotesData.text}`;
+            // window.open will redirect to tweet post page
+            window.open(tweetPost);
+        }
+        // function defination to generate random number
+        const getNewQuotes= ()=>{
+            const rnum= Math.floor(Math.random()*10); // 10 is multiplied to get integer number and math.floor() is used to neglect decimal value
+            quotesData= realData[rnum];
+            quotes.innerText= `${quotesData.text}`; // text inside quotes is added using innerText and literal template
+            if(quotesData==null){
+                author.innerText="unKnown";
+            }
+            else{
+                author.innerText= `${quotesData.author}`; 
+                
+            }
+            
+           
+        };
+       const getQuotes= async()=>{
+        const api= "https://type.fit/api/quotes";
+        try {
+            let data= await fetch(api);
+            // to convert readable stream into json object
+             realData= await data.json();
+
+             // function call to get random number
+             getNewQuotes();
+            //console.log(realData.length);
+        } catch (error) {
+            
+        }
+       };
+
+       // add an event on button
+       newQ.addEventListener("click",getNewQuotes);
+       tweetMe.addEventListener("click",tweetNow);
+       getQuotes();
+       
+   
+    </script>
+</body>
+</html>
